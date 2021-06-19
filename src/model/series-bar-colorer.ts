@@ -71,7 +71,10 @@ export class SeriesBarColorer {
 		const borderDownColor = downColor;
 
 		const currentBar = ensureNotNull(this._findBar(barIndex, precomputedBars));
-		const isUp = ensure(currentBar.value[PlotRowValueIndex.Open]) <= ensure(currentBar.value[PlotRowValueIndex.Close]);
+		let isUp = ensure(currentBar.value[PlotRowValueIndex.Open]) <= ensure(currentBar.value[PlotRowValueIndex.Close]);
+		if (precomputedBars?.previousValue !== undefined) {
+			isUp = ensure(precomputedBars?.previousValue.value[PlotRowValueIndex.Close]) <= ensure(currentBar.value[PlotRowValueIndex.Close]);
+		}
 
 		result.barColor = isUp ? upColor : downColor;
 		result.barBorderColor = isUp ? borderUpColor : borderDownColor;
